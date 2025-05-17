@@ -1,6 +1,8 @@
 FROM alpine as builder
 RUN apk add --no-cache squid
-COPY squid.conf /etc/squid/squid.conf
+COPY ./configs/squid.conf /etc/squid/squid.conf
+COPY ./configs/conf.d/*.conf /etc/squid/conf.d/
+COPY ./configs/ssl/* /etc/squid/ssl/
 RUN squid -k parse
 
 FROM alpine

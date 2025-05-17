@@ -11,3 +11,5 @@ services:
     volumes:
       - ./volumes/squid_cache:/var/cache/squid
       - ./volumes/squid_logs:/var/log/squid
+      - ./configs/conf.d/:/etc/squid/conf.d/
+      - ./configs/ssl/:/etc/squid/ssl/

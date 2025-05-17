@@ -1,11 +1,13 @@
 ---
 services:
-  squid-rotator: 
-    image: ubuntu/squid
+  squid:
+    build: .
     container_name: squid
+    restart: always
     ports:
       - "3128:3128"
+      - "3129:3129"
+      - "3130:3130"
     volumes:
-      - ./volumes/squid.conf:/etc/squid/squid.conf
-      - ./volumes/logs:/var/log/squid
-    restart: always
+      - ./volumes/squid_cache:/var/cache/squid
+      - ./volumes/squid_logs:/var/log/squid

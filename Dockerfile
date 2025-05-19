@@ -1,15 +1,25 @@
+# Этап сборки: проверка конфигурации
 FROM alpine as builder
+
 RUN apk add --no-cache squid
-COPY ./configs/squid.conf /etc/squid/squid.conf
-COPY ./configs/conf.d/*.conf /etc/squid/conf.d/
-COPY ./configs/ssl/* /etc/squid/ssl/
+
+# Проверка синтаксиса конфига
 RUN squid -k parse
 
+# Финальный образ
 FROM alpine
-RUN apk add --no-cache squid openssl
-COPY --from=builder /etc/squid/squid.conf /etc/squid/squid.conf
-COPY --from=builder /var/cache/squid /var/cache/squid
-VOLUME ["/var/log/squid", "/var/cache/squid"]
-HEALTHCHECK --interval=30s --timeout=3s CMD squid -k check || exit 1
-EXPOSE 3128 3129 3130
+
+RUN apk add --no-cache squid
+
+# Копируем ВСЮ конфигурацию и SSL-сертификаты из builder
+COPY --from=builder /etc/squid/ /etc/squid/
+
+# HEALTHCHECK с проверкой работы Squid
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD nc -z localhost 3128 || exit 1
+
+# Открываем только нужные порты (3128 по умолчанию)
+EXPOSE 3128
+
+# Запуск в foreground-режиме
 CMD ["squid", "-N"]

@@ -5,11 +5,9 @@ services:
     container_name: squid
     restart: always
     ports:
-      - "3128:3128"
-      - "3129:3129"
-      - "3130:3130"
+      - "3128:3128"   # HTTP
+      - "3129:3129"   # HTPPS
     volumes:
       - ./volumes/squid_cache:/var/cache/squid
       - ./volumes/squid_logs:/var/log/squid
-      - ./configs/conf.d/:/etc/squid/conf.d/
       - ./configs/ssl/:/etc/squid/ssl/

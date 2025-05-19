@@ -1,7 +1,9 @@
 #!/bin/sh
 
+WORK_DIR=/opt/docker/squid/configs/ssl/squid.pem  # The working variable dir
+
 # Initialize SSL
-if [ ! -f "/etc/squid/ssl/squid.pem" ]; then
+if [ ! -f "${WORK_DIR}" ]; then
   /scripts/generate-ssl.sh
 fi
 
